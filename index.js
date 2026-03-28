@@ -119,9 +119,9 @@ async function generateConfig() {
       { port: 3004, listen: "127.0.0.1", protocol: "trojan", settings: { clients: [{ password: UUID }] }, streamSettings: { network: "ws", security: "none", wsSettings: { path: "/trojan-argo" } }, sniffing: { enabled: true, destOverride: ["http", "tls", "quic"], metadataOnly: false } },
     ],
     dns: { servers: ["https+local://8.8.8.8/dns-query"] },
-    outbounds: [
-      { protocol: "freedom", tag: "direct" },
-      {protocol: "blackhole", tag: "block"}
+    outbounds: [ 
+      { protocol: "freedom", tag: "direct" }, 
+      {protocol: "blackhole", tag: "block"} 
     ]
   };
   fs.writeFileSync(path.join(FILE_PATH, 'config.json'), JSON.stringify(config, null, 2));
