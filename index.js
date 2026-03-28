@@ -286,9 +286,32 @@ uuid: ${UUID}`;
     try {
       await exec(command1);
       console.log(`${webName} is running`);
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      // Wait a bit and check if process is still alive
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+      // Check if web process is still running
+      const checkCommand = `pgrep -f "${webPath}"`;
+      const { stdout } = await exec(checkCommand);
+      if (stdout.trim()) {
+        console.log(`${webName} process confirmed running`);
+      } else {
+        console.error(`${webName} process died shortly after start`);
+        // Try to read the log to see what happened
+        try {
+          const logContent = await fs.promises.readFile(`${FILE_PATH}/web.log`, 'utf8');
+          console.error(`Web log content: ${logContent}`);
+        } catch (logError) {
+          console.error(`Could not read web log: ${logError.message}`);
+        }
+      }
     } catch (error) {
       console.error(`web running error: ${error}`);
+      // Try to read the log to see what happened
+      try {
+        const logContent = await fs.promises.readFile(`${FILE_PATH}/web.log`, 'utf8');
+        console.error(`Web log content: ${logContent}`);
+      } catch (logError) {
+        console.error(`Could not read web log: ${logError.message}`);
+      }
     }
 
   // 运行cloud-fared
@@ -603,6 +626,21 @@ app.get("/", async function(req, res) {
     res.send(data);
   } catch (err) {
     res.send("Hello world!<br><br>You can access /{SUB_PATH}(Default: /sub) to get your nodes!");
+  }
+});
+
+// Web log endpoint for debugging
+app.get("/web-log", async function(req, res) {
+  try {
+    const logPath = path.join(FILE_PATH, 'web.log');
+    if (!(await fs.promises.stat(logPath)).isFile()) {
+      return res.status(404).send("Web log not found");
+    }
+    const logContent = await fs.promises.readFile(logPath, 'utf8');
+    res.set('Content-Type', 'text/plain; charset=utf-8');
+    res.send(logContent);
+  } catch (err) {
+    res.status(500).send(`Error reading web log: ${err.message}`);
   }
 });
 
