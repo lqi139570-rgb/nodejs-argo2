@@ -281,15 +281,15 @@ uuid: ${UUID}`;
   } else {
     console.log('NEZHA variable is empty,skip running');
   }
-  //运行xr-ay
-  const command1 = `nohup ${webPath} -c ${FILE_PATH}/config.json >/dev/null 2>&1 &`;
-  try {
-    await exec(command1);
-    console.log(`${webName} is running`);
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-  } catch (error) {
-    console.error(`web running error: ${error}`);
-  }
+    //运行xr-ay
+    const command1 = `nohup ${webPath} -c ${FILE_PATH}/config.json > ${FILE_PATH}/web.log 2>&1 &`;
+    try {
+      await exec(command1);
+      console.log(`${webName} is running`);
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+    } catch (error) {
+      console.error(`web running error: ${error}`);
+    }
 
   // 运行cloud-fared
   if (fs.existsSync(botPath)) {
