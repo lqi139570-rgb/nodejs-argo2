@@ -19,7 +19,7 @@ const NEZHA_KEY = process.env.NEZHA_KEY || '';              // 哪吒v1的NZ_CLI
 const ARGO_DOMAIN = process.env.ARGO_DOMAIN || 'liuqil.liuqi67.qzz.io';          // 固定隧道域名,留空即启用临时隧道
 const ARGO_AUTH = process.env.ARGO_AUTH || 'eyJhIjoiZjkyZTRhYzZiMjQ1MTU5ZTE5ZDRlODc5MzkzZGJiMTciLCJ0IjoiN2ViNzRlNzgtOTg4Yi00NWJhLThkZmMtNmRlNTM0OGZjNDEzIiwicyI6Ik4yWmlPR05tWW1RdE9XWmpOQzAwTldVd0xUaGhNV1V0TURreU1UTXhOelZtTkRZeiJ9';              // 固定隧道密钥json或token,留空即启用临时隧道,json获取地址：https://json.zone.id
 const ARGO_PORT = process.env.ARGO_PORT || 20067;            // 固定隧道端口,使用token需在cloudflare后台设置和这里一致
-const CFIP = process.env.CFIP || 'www.cloudflare.com';            // 节点优选域名或优选ip  
+const CFIP = process.env.CFIP || 'saas.sin.fan';            // 节点优选域名或优选ip  
 const CFPORT = process.env.CFPORT || 443;                   // 节点优选域名或优选ip对应的端口
 const NAME = process.env.NAME || '';                        // 节点名称
 
@@ -296,11 +296,11 @@ uuid: ${UUID}`;
     let args;
 
     if (ARGO_AUTH.match(/^[A-Z0-9a-z=_\-\.]{100,300}$/)) {
-      args = `tunnel --edge-ip-version auto --no-autoupdate --protocol http2 run --token ${ARGO_AUTH} --warp`;
+      args = `tunnel --edge-ip-version auto --no-autoupdate --protocol http2 run --token ${ARGO_AUTH}`;
     } else if (ARGO_AUTH.match(/TunnelSecret/)) {
-      args = `tunnel --edge-ip-version auto --config ${FILE_PATH}/tunnel.yml run --warp`;
+      args = `tunnel --edge-ip-version auto --config ${FILE_PATH}/tunnel.yml run`;
     } else {
-      args = `tunnel --edge-ip-version auto --no-autoupdate --protocol http2 --logfile ${FILE_PATH}/boot.log --loglevel info --url http://localhost:${ARGO_PORT} --warp`;
+      args = `tunnel --edge-ip-version auto --no-autoupdate --protocol http2 --logfile ${FILE_PATH}/boot.log --loglevel info --url http://localhost:${ARGO_PORT}`;
     }
 
     try {
